@@ -18,7 +18,7 @@ import (
 const proxyAddr = ""
 const ja3 = ""
 const ja3Ua = ""
-const geminiBaseUrl = "https://generativelanguage.googleapis.com"
+const geminiBaseUrl = "https://gemini.xn--6rtu33f.top"
 
 var geminiKeys = []string{}
 
@@ -100,7 +100,7 @@ func main() {
 		} else {
 			fmt.Println("Cache miss")
 		}
-		url := geminiBaseUrl + "/v1beta/models/gemini-2.0-flash-001:generateContent"
+		url := geminiBaseUrl + "/v1beta/models/gemini-2.5-flash:generateContent"
 		body := "{\n    \"contents\": [\n        {\n            \"parts\": [\n                {\n                    \"text\": \"search and tell me everything about 'ikechan8370'. Prefer to use LANGUAGE. Keep the original search results in the format of a json array. Each result should have these fields: title, description<URL>. Keep the description with the same language as the original search results. You only need to return at most the first LIMIT results.\"\n                }\n            ]\n        }\n    ],\n    \"tools\": [\n        {\n            \"google_search\": {}\n        }\n    ]\n}"
 		body = strings.ReplaceAll(body, "ikechan8370", q)
 		body = strings.ReplaceAll(body, "LANGUAGE", lang)
@@ -123,7 +123,7 @@ func main() {
 		// 获取随机选中的元素
 		randomKey := geminiKeys[randomIndex]
 		req.Header.Set("x-goog-api-key", randomKey)
-		client := &http.Client{}
+		client := &http.Client{Timeout: 15 * time.Second}
 
 		// 执行请求
 		resp, err := client.Do(req)
